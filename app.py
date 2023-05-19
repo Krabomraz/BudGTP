@@ -1,11 +1,15 @@
+import os
 import telegram
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/budgpt'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://#{os.getenv('DB_USER')}:#{os.getenv('DB_PASSWORD')}@#{os.getenv('DB_HOST')}/#{os.getenv('DB_NAME')}"
 db = SQLAlchemy(app)
-bot = telegram.Bot(token='6040180287:AAHIxIYOz3HseQ5Ushel49lfuyuLm8EuJek')
+bot = telegram.Bot(token=os.getenv('TG_BOT_API_TOKEN'))
 
 
 @app.route('/webhook', methods=['POST'])
